@@ -7,9 +7,14 @@ const morgan = require('morgan');
 // Config
 app.use(morgan('tiny'));
 app.use((req, res, next) => {
-    req.timeRequest = Date.now();
+    // req.timeRequest = Date.now();
     console.log(req.method, req.url);
     next();
+});
+app.use((req, res, next) => {
+    const { password } = req.query;
+    if (password === '123456') next();
+    res.send('Password required.');
 });
 
 // Routing
