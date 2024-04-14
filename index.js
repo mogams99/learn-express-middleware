@@ -40,7 +40,7 @@ app.get('/error', (req, res) => {
     bird.fly();
 });
 
-// Middleware Error
+// Middleware Error Handling 1
 // app.use((err, req, res, next) => {
 //     console.log('**********************************************************');
 //     console.log('***************************ERROR**************************');
@@ -48,7 +48,7 @@ app.get('/error', (req, res) => {
 //     next(err);
 // });
 
-// Middleware Error Handling
+// Middleware Error Handling 2
 app.use((err, req, res, next) => {
     const { status = 500, message = 'Something went wrong' } = err;
     res.status(status).send(message);
