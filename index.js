@@ -7,12 +7,8 @@ const morgan = require('morgan');
 // Config
 app.use(morgan('tiny'));
 app.use((req, res, next) => {
-    console.log('Init middleware 1');
-    next();
-    console.log('Init middleware 1 after next');
-});
-app.use((req, res, next) => {
-    console.log('Init middleware 2');
+    req.timeRequest = Date.now();
+    console.log(req.method, req.url);
     next();
 });
 
@@ -21,13 +17,16 @@ app.get('/', (req, res) => {
     res.send({
         message: 'Hello World!'
     });
-
 });
 app.get('/products', (req, res) => {
+    console.log(req.timeRequest);
     res.send({
         message: 'Data successfully retrieved.',
         data: []
     });
+});
+app.use((req, res) => {
+    res.status(404).send('Page not found.');
 });
 
 // Connect to App
