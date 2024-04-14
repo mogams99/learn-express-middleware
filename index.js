@@ -14,7 +14,7 @@ app.use((req, res, next) => {
 const middAuth = (req, res, next) => {
     const { password } = req.query;
     if (password === '123456') next();
-    res.send('Password required.');
+    throw new Error('Password required.');
 };
 
 // Routing
@@ -32,6 +32,17 @@ app.get('/products', (req, res) => {
         message: 'Data successfully retrieved.',
         data: []
     });
+});
+app.get('/error', (req, res) => {
+    bird.fly();
+});
+
+// Middleware Page Not Found
+app.use((err, req, res, next) => {
+    console.log('**********************************************************');
+    console.log('***************************ERROR**************************');
+    console.log('**********************************************************');
+    next(err);
 });
 
 // Middleware Page Not Found
