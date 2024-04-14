@@ -4,6 +4,9 @@ const app = express();
 const port = 3001;
 const morgan = require('morgan');
 
+// Import Class 
+const ErrorHandler = require('./ErrorHandler');
+
 // Config
 app.use(morgan('tiny'));
 app.use((req, res, next) => {
@@ -14,7 +17,7 @@ app.use((req, res, next) => {
 const middAuth = (req, res, next) => {
     const { password } = req.query;
     if (password === '123456') next();
-    throw new Error('Password required.');
+    throw new ErrorHandler('Password required.', 401);
 };
 
 // Routing
@@ -37,12 +40,18 @@ app.get('/error', (req, res) => {
     bird.fly();
 });
 
-// Middleware Page Not Found
+// Middleware Error
+// app.use((err, req, res, next) => {
+//     console.log('**********************************************************');
+//     console.log('***************************ERROR**************************');
+//     console.log('**********************************************************');
+//     next(err);
+// });
+
+// Middleware Error Handling
 app.use((err, req, res, next) => {
-    console.log('**********************************************************');
-    console.log('***************************ERROR**************************');
-    console.log('**********************************************************');
-    next(err);
+    const { status = 500, message = 'Something went wrong' } = err;
+    res.status(status).send(message);
 });
 
 // Middleware Page Not Found
