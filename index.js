@@ -11,17 +11,20 @@ app.use((req, res, next) => {
     console.log(req.method, req.url);
     next();
 });
-app.use((req, res, next) => {
+const middAuth = (req, res, next) => {
     const { password } = req.query;
     if (password === '123456') next();
     res.send('Password required.');
-});
+};
 
 // Routing
 app.get('/', (req, res) => {
     res.send({
         message: 'Hello World!'
     });
+});
+app.get('/admin', middAuth, (req, res) => {
+    res.send('Hello Admin!');
 });
 app.get('/products', (req, res) => {
     console.log(req.timeRequest);
@@ -30,6 +33,8 @@ app.get('/products', (req, res) => {
         data: []
     });
 });
+
+// Middleware Page Not Found
 app.use((req, res) => {
     res.status(404).send('Page not found.');
 });
